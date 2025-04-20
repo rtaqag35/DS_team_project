@@ -35,6 +35,7 @@ public:
     void displayGraph() const;
     const vector<Airport>& getAirports() const;
     void displayConnections() const;
+    void CreateGraphU() const;
 };
 
 #endif
