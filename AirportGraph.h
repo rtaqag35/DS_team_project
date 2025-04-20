@@ -34,6 +34,9 @@ public:
     void displayAirports() const;
     void displayGraph() const;
     const vector<Airport>& getAirports() const;
+    int* findShortestRoute(string startIndex, string destinationIndex, bool showOutput, bool showNoResult);
+    void findAllShortestRoutesToState(string startIndex, string state);
+    void findShortestRouteGivenStops(string startCode, string destCode,  int numStops);
     void displayConnections() const;
     void CreateGraphU() const;
 };
