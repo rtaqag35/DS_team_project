@@ -121,3 +121,21 @@ void AirportGraph::displayConnections() const {
         cout << airportConnections[i].code << ": " << airportConnections[i].count << endl;
     }
 }
+
+//Creates new array containing the new connections of GraphU
+void AirportGraph::CreateGraphU() const {
+    int newConnections[airports.size()][airports.size()] = { 0 };
+    for (const auto& airport : airports) {
+        
+        for (Edge* e = airport.head; e != nullptr; e = e->next) {
+            if (newConnections[airport.index][e->dest] == 0)
+                newConnections[airport.index][e->dest] = e->cost;
+                newConnections[e->dest][airport.index] = e->cost;
+            else if (newConnections[airport.index][e->dest] > e->cost) {
+                newConnections[airport.index][e->dest] = e->cost;
+                newConnections[e->dest][airport.index] = e->cost;
+            }
+        }
+        
+    }
+}
