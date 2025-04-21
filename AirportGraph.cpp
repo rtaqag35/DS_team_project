@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <limits>
+#include <climits>
 #include <algorithm>
 #include <functional>
 using namespace std;
@@ -379,7 +380,7 @@ int AirportGraph::minKey(vector<int> &key, vector<bool> &mstSet) const{
 //Creates Graph_U and the MST using Prim's algorithm
 void AirportGraph::primMST() const {
     //Creates new array containing the new connections of GraphU
-    int newConnections[airports.size()][airports.size()] = { 0 };
+    vector<vector<int>> newConnections(V, vector<int>(V, 0));
     for (const auto& airport : airports) {
         for (Edge* e = airport.head; e != nullptr; e = e->next) {
             if (newConnections[airport.index][e->dest] == 0) {
@@ -424,7 +425,9 @@ void AirportGraph::primMST() const {
         // Pick the minimum key vertex from the
         // set of vertices not yet included in MST
         int u = minKey(key, mstSet);
-
+        if (u == -1) {
+            cerr << "Error: No minimum key vertex found this graph is disconnected\n";
+            break;
         // Add the picked vertex to the MST Set
         mstSet[u] = true;
 
