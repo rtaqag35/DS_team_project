@@ -24,5 +24,9 @@ int main() {
     graph.displayConnections();
     
     graph.CreateGraphU();
+
+    graph.primMST();
+    
+    graph.KruskalMST();
     return 0;
 }
