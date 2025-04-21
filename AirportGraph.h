@@ -28,6 +28,7 @@ private:
     map<string, int> airportIndexMap; // map airport code to index
     int findAirportIndex(const string& code);
     void addEdge(int srcIdx, int destIdx, int distance, int cost);
+    int minKey(vector<int> &key, vector<bool> &mstSet) const; //helper function for primMST
 
 public:
     void loadTXT(const string& filename); // updated to read from .txt
@@ -39,6 +40,7 @@ public:
     void findShortestRouteGivenStops(string startCode, string destCode,  int numStops);
     void displayConnections() const;
     void CreateGraphU() const;
+    void primMST() const;
 };
 
 #endif
