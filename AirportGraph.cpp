@@ -5,6 +5,7 @@
 #include <sstream>
 #include <limits>
 #include <algorithm>
+#include <functional>
 using namespace std;
 
 //counts the total number of airports for creating arrays (has 1 extra to be safe)
@@ -451,4 +452,72 @@ void AirportGraph::primMST() const {
         }
     }
     cout << "Total Cost of MST: " << total << endl;
+}
+
+//Creates Graph_U and the MST using kruskal's algorithm
+void AirportGraph::KruskalMST() const{
+     struct KruskalEdge {
+        int src, dest, cost;
+        bool operator<(const KruskalEdge& other) const {
+            return cost < other.cost;
+        }
+    };
+
+    int V = airports.size();
+    vector<KruskalEdge> allEdges;
+
+    //collect all edges (undirected, so avoid duplicates)
+    for (const auto& airport : airports) {
+        for (Edge* e = airport.head; e != nullptr; e = e->next) {
+            if (airport.index < e->dest) { // prevent adding both A->B and B->A
+                allEdges.push_back({airport.index, e->dest, e->cost});
+            }
+        }
+    }
+
+    //sort edges by cost
+    sort(allEdges.begin(), allEdges.end());
+
+    //union-Find structure
+    vector<int> parent(V), rank(V, 0);
+    for (int i = 0; i < V; ++i) parent[i] = i;
+
+    //helper functions for Union-Find
+    function<int(int)> find = [&](int u) {
+        if (parent[u] != u) parent[u] = find(parent[u]);
+        return parent[u];
+    };
+
+    auto unite = [&](int u, int v) {
+        int rootU = find(u);
+        int rootV = find(v);
+        if (rootU == rootV) return false;
+
+        if (rank[rootU] < rank[rootV]) parent[rootU] = rootV;
+        else if (rank[rootU] > rank[rootV]) parent[rootV] = rootU;
+        else {
+            parent[rootV] = rootU;
+            rank[rootU]++;
+        }
+        return true;
+    };
+
+    //kruskal's MST
+    int totalCost = 0;
+    vector<KruskalEdge> mstEdges;
+
+    for (const auto& edge : allEdges) {
+        if (unite(edge.src, edge.dest)) {
+            mstEdges.push_back(edge);
+            totalCost += edge.cost;
+            if (mstEdges.size() == V - 1) break;
+        }
+    }
+
+    //output
+    cout << "Kruskal's MST:\n";
+    for (const auto& edge : mstEdges) {
+        cout << airports[edge.src].code << " - " << airports[edge.dest].code << " (Cost: " << edge.cost << ")\n";
+    }
+    cout << "Total Cost of MST: " << totalCost << endl;
 }
