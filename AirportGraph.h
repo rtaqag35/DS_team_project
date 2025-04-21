@@ -41,6 +41,7 @@ public:
     void displayConnections() const;
     void CreateGraphU() const;
     void primMST() const;
+    void KruskalMST() const;
 };
 
 #endif
